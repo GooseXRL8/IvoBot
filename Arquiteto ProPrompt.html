@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0a0a12" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f0ff" media="(prefers-color-scheme: light)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="PromptArchitect Pro - Engenharia de Prompt Avançada com IA">
+  <title>🏗️ PromptArchitect Pro</title>
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUHJvbXB0QXJjaGl0ZWN0IFBybyIsInNob3J0X25hbWUiOiJQcm9tcHRQcm8iLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBhMGExMiIsInRoZW1lX2NvbG9yIjoiI2E3OGJmYSJ9">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <style>
+    /* ============================================
+       DESIGN SYSTEM - PromptArchitect Pro
+       Paleta: Roxo/Violeta + Amber/Gold accents
+       ============================================ */
+    :root {
+      --primary: #a78bfa;
+      --primary-light: #c4b5fd;
+      --primary-dark: #7c3aed;
+      --primary-vivid: #8b5cf6;
+      --accent: #f59e0b;
+      --accent-light: #fbbf24;
+      --accent-glow: rgba(245, 158, 11, 0.25);
+      --success: #10b981;
+      --error: #ef4444;
+      --info: #3b82f6;
+
+      /* Superfícies - Light Mode */
+      --bg-primary: #f4f0ff;
+      --bg-secondary: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.6);
+      --bg-glass-strong: rgba(255, 255, 255, 0.85);
+      --bg-input: rgba(255, 255, 255, 0.92);
+      --bg-message-user: linear-gradient(135deg, #7c3aed, #a78bfa);
+      --bg-message-ai: rgba(255, 255, 255, 0.75);
+      --bg-code: rgba(30, 20, 50, 0.06);
+      --bg-skeleton: linear-gradient(90deg, #ede9fe 25%, #f4f0ff 50%, #ede9fe 75%);
+      --bg-section: rgba(167, 139, 250, 0.06);
+
+      /* Texto */
+      --text-primary: #1a1025;
+      --text-secondary: #6b6280;
+      --text-on-primary: #ffffff;
+      --text-muted: #9ca3af;
+      --text-accent: #d97706;
+      --text-code: #7c3aed;
+
+      /* Bordas e sombras */
+      --border: rgba(124, 58, 237, 0.1);
+      --border-strong: rgba(124, 58, 237, 0.22);
+      --border-accent: rgba(245, 158, 11, 0.3);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.07);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+      --shadow-glow: 0 0 24px rgba(124, 58, 237, 0.15);
+      --shadow-accent-glow: 0 0 20px rgba(245, 158, 11, 0.12);
+
+      /* Espaçamento */
+      --space-xs: 4px; --space-sm: 8px; --space-md: 16px;
+      --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px;
+
+      /* Tipografia fluid */
+      --font-xs: clamp(0.68rem, 0.63rem + 0.25vw, 0.75rem);
+      --font-sm: clamp(0.78rem, 0.73rem + 0.25vw, 0.875rem);
+      --font-base: clamp(0.88rem, 0.83rem + 0.25vw, 1rem);
+      --font-lg: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
+      --font-xl: clamp(1.25rem, 1.05rem + 1vw, 1.7rem);
+      --font-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.1rem);
+      --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+
+      /* Raios */
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px;
+      --radius-xl: 28px; --radius-full: 9999px;
+
+      /* Transições 60fps */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* Safe areas */
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* DARK MODE */
+    [data-theme="dark"] {
+      --bg-primary: #0a0a12;
+      --bg-secondary: #13111f;
+      --bg-glass: rgba(19, 17, 31, 0.7);
+      --bg-glass-strong: rgba(19, 17, 31, 0.92);
+      --bg-input: rgba(25, 22, 40, 0.95);
+      --bg-message-ai: rgba(25, 22, 45, 0.8);
+      --bg-code: rgba(167, 139, 250, 0.08);
+      --bg-skeleton: linear-gradient(90deg, #1a1530 25%, #221d3a 50%, #1a1530 75%);
+      --bg-section: rgba(167, 139, 250, 0.05);
+      --text-primary: #ede9fe;
+      --text-secondary: #a09bb5;
+      --text-muted: #6b6580;
+      --text-accent: #fbbf24;
+      --text-code: #c4b5fd;
+      --border: rgba(167, 139, 250, 0.12);
+      --border-strong: rgba(167, 139, 250, 0.25);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary); color: var(--text-primary);
+      line-height: 1.6; overflow: hidden; height: 100dvh; width: 100vw;
+    }
+    #root { height: 100dvh; display: flex; flex-direction: column; }
+
+    /* ============================================
+       ANIMATIONS - 60fps (transform/opacity only)
+       ============================================ */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes typingDot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(-20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
+    @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 15px rgba(167,139,250,0.15); } 50% { box-shadow: 0 0 25px rgba(167,139,250,0.3); } }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(167,139,250,0.2); }
+      50% { border-color: rgba(167,139,250,0.5); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* ============================================
+       APP LAYOUT
+       ============================================ */
+    .app-container {
+      display: flex; flex-direction: column; height: 100dvh;
+      max-width: 768px; margin: 0 auto; width: 100%;
+      position: relative; overflow: hidden;
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+    .header {
+      padding: calc(var(--safe-top) + var(--space-sm)) var(--space-md) var(--space-sm);
+      background: var(--bg-glass-strong);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 100; flex-shrink: 0;
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
+    .header-brand { display: flex; align-items: center; gap: var(--space-sm); }
+    .header-logo {
+      width: 40px; height: 40px;
+      background: var(--bg-message-user);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: var(--shadow-glow);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    .header-title {
+      font-size: var(--font-lg); font-weight: 700; letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-subtitle {
+      font-size: var(--font-xs); color: var(--text-secondary); font-weight: 500;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .status-dot {
+      width: 6px; height: 6px; background: var(--success);
+      border-radius: 50%; display: inline-block; animation: pulse 2s infinite;
+    }
+    .header-actions { display: flex; gap: var(--space-sm); }
+
+    /* Botões de ação - Touch target 44x44+ */
+    .icon-btn {
+      width: 44px; height: 44px; min-width: 44px;
+      border: none; background: var(--bg-glass);
+      backdrop-filter: blur(10px); border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-secondary); font-size: 18px;
+      transition: all var(--transition-fast);
+      border: 1px solid var(--border);
+    }
+    .icon-btn:active { transform: scale(0.92); }
+    .icon-btn:hover { background: var(--border-strong); color: var(--primary); }
+
+    /* ============================================
+       CHAT AREA
+       ============================================ */
+    .chat-area {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: var(--space-md); scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;
+    }
+    .chat-area::-webkit-scrollbar { width: 3px; }
+    .chat-area::-webkit-scrollbar-track { background: transparent; }
+    .chat-area::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-full); }
+
+    /* ============================================
+       EMPTY STATE - PromptArchitect Branding
+       ============================================ */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; text-align: center;
+      padding: var(--space-lg); animation: fadeIn 0.6s ease;
+    }
+    .empty-logo {
+      width: 88px; height: 88px;
+      background: var(--bg-message-user);
+      border-radius: var(--radius-xl);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-glow);
+      animation: float 4s ease-in-out infinite;
+    }
+    .empty-state h2 {
+      font-size: var(--font-xl); font-weight: 800;
+      letter-spacing: -0.03em; margin-bottom: var(--space-xs);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .empty-tagline {
+      font-size: var(--font-sm); color: var(--text-accent);
+      font-weight: 600; margin-bottom: var(--space-sm);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .empty-state p {
+      color: var(--text-secondary); font-size: var(--font-sm);
+      max-width: 320px; margin-bottom: var(--space-lg); line-height: 1.7;
+    }
+
+    /* Técnicas badges */
+    .tech-badges {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      justify-content: center; max-width: 360px; margin-bottom: var(--space-lg);
+    }
+    .tech-badge {
+      padding: 4px 10px; background: var(--bg-section);
+      border: 1px solid var(--border); border-radius: var(--radius-full);
+      font-size: var(--font-xs); color: var(--primary-vivid);
+      font-weight: 500; white-space: nowrap;
+    }
+    [data-theme="dark"] .tech-badge { color: var(--primary-light); }
+
+    /* Sugestões */
+    .suggestions { display: flex; flex-direction: column; gap: var(--space-sm); width: 100%; max-width: 360px; }
+    .suggestion-chip {
+      padding: var(--space-md); background: var(--bg-glass);
+      backdrop-filter: blur(10px); border: 1px solid var(--border);
+      border-radius: var(--radius-md); font-size: var(--font-sm);
+      color: var(--text-primary); cursor: pointer;
+      transition: all var(--transition-fast);
+      text-align: left; display: flex; align-items: center; gap: var(--space-sm);
+      min-height: 48px;
+    }
+    .suggestion-chip:hover { border-color: var(--primary); background: rgba(124,58,237,0.08); transform: translateY(-1px); }
+    .suggestion-chip:active { transform: scale(0.98); }
+    .suggestion-emoji { font-size: 20px; flex-shrink: 0; }
+    .suggestion-text { flex: 1; }
+    .suggestion-label { font-weight: 600; font-size: var(--font-sm); }
+    .suggestion-desc { font-size: var(--font-xs); color: var(--text-muted); margin-top: 2px; }
+
+    /* ============================================
+       MENSAGENS
+       ============================================ */
+    .message {
+      display: flex; gap: var(--space-sm); margin-bottom: var(--space-md);
+      animation: fadeInUp 0.3s ease; max-width: 92%;
+    }
+    .message-user { flex-direction: row-reverse; margin-left: auto; }
+    .message-avatar {
+      width: 32px; height: 32px; min-width: 32px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; align-self: flex-end;
+    }
+    .message-user .message-avatar { background: var(--bg-message-user); }
+    .message-ai .message-avatar { background: var(--bg-glass); border: 1px solid var(--border); }
+    .message-content { min-width: 0; flex: 1; }
+    .message-bubble {
+      padding: var(--space-md); border-radius: var(--radius-lg);
+      font-size: var(--font-base); line-height: 1.7;
+      position: relative; word-break: break-word;
+    }
+    .message-user .message-bubble {
+      background: var(--bg-message-user); color: var(--text-on-primary);
+      border-bottom-right-radius: var(--space-xs);
+    }
+    .message-ai .message-bubble {
+      background: var(--bg-message-ai); backdrop-filter: blur(10px);
+      border: 1px solid var(--border); border-bottom-left-radius: var(--space-xs);
+    }
+    .message-time {
+      font-size: var(--font-xs); color: var(--text-muted);
+      margin-top: var(--space-xs);
+    }
+    .message-user .message-time { text-align: right; color: rgba(255,255,255,0.5); }
+
+    /* Formatação de resposta do AI */
+    .message-bubble h3 {
+      font-size: var(--font-base); font-weight: 700;
+      margin: var(--space-md) 0 var(--space-sm); color: var(--primary-vivid);
+      display: flex; align-items: center; gap: 6px;
+    }
+    [data-theme="dark"] .message-bubble h3 { color: var(--primary-light); }
+    .message-bubble h3:first-child { margin-top: 0; }
+    .message-bubble ul, .message-bubble ol {
+      padding-left: var(--space-lg); margin: var(--space-sm) 0;
+    }
+    .message-bubble li { margin-bottom: var(--space-xs); }
+    .message-bubble strong { color: var(--text-accent); font-weight: 700; }
+    [data-theme="dark"] .message-bubble strong { color: var(--accent-light); }
+    .message-bubble em { font-style: italic; opacity: 0.9; }
+    .message-bubble pre {
+      background: var(--bg-code); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: var(--space-md);
+      overflow-x: auto; margin: var(--space-sm) 0;
+      font-size: var(--font-sm); font-family: var(--font-mono);
+      line-height: 1.5; position: relative;
+    }
+    .message-bubble code {
+      font-family: var(--font-mono); font-size: 0.88em;
+      background: var(--bg-code); padding: 2px 6px;
+      border-radius: 4px; color: var(--text-code);
+    }
+    .message-bubble pre code { background: none; padding: 0; color: inherit; }
+
+    /* Copy button for code blocks */
+    .copy-btn {
+      position: absolute; top: 6px; right: 6px;
+      padding: 4px 8px; background: var(--bg-glass);
+      border: 1px solid var(--border); border-radius: 6px;
+      font-size: var(--font-xs); cursor: pointer;
+      color: var(--text-muted); transition: all var(--transition-fast);
+    }
+    .copy-btn:hover { background: var(--border-strong); color: var(--primary); }
+
+    /* Section highlights in AI responses */
+    .message-bubble .section-analysis { border-left: 3px solid var(--info); padding-left: var(--space-md); margin: var(--space-sm) 0; }
+    .message-bubble .section-techniques { border-left: 3px solid var(--accent); padding-left: var(--space-md); margin: var(--space-sm) 0; }
+    .message-bubble .section-refined { border-left: 3px solid var(--success); padding-left: var(--space-md); margin: var(--space-sm) 0; }
+
+    /* Typing indicator */
+    .typing-indicator { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); animation: fadeInUp 0.3s ease; }
+    .typing-dots {
+      display: flex; gap: 4px; padding: var(--space-md);
+      background: var(--bg-message-ai); backdrop-filter: blur(10px);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      border-bottom-left-radius: var(--space-xs);
+    }
+    .typing-label { font-size: var(--font-xs); color: var(--text-muted); font-style: italic; }
+    .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+    .typing-dot:nth-child(1) { animation: typingDot 1.4s infinite 0s; }
+    .typing-dot:nth-child(2) { animation: typingDot 1.4s infinite 0.2s; }
+    .typing-dot:nth-child(3) { animation: typingDot 1.4s infinite 0.4s; }
+
+    /* ============================================
+       INPUT AREA
+       ============================================ */
+    .input-area {
+      padding: var(--space-sm) var(--space-md) calc(var(--safe-bottom) + var(--space-sm));
+      background: var(--bg-glass-strong);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+    .input-context {
+      display: flex; align-items: center; gap: var(--space-sm);
+      padding: 0 var(--space-sm) var(--space-sm);
+      font-size: var(--font-xs); color: var(--text-muted);
+    }
+    .input-context-badge {
+      padding: 2px 8px; background: var(--bg-section);
+      border: 1px solid var(--border); border-radius: var(--radius-full);
+      font-size: var(--font-xs); color: var(--primary-vivid); font-weight: 500;
+    }
+    [data-theme="dark"] .input-context-badge { color: var(--primary-light); }
+    .input-wrapper {
+      display: flex; align-items: flex-end; gap: var(--space-sm);
+      background: var(--bg-input); border: 1.5px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+    .chat-input {
+      flex: 1; border: none; background: transparent;
+      font-size: var(--font-base); color: var(--text-primary);
+      resize: none; outline: none; font-family: inherit;
+      line-height: 1.5; max-height: 140px; min-height: 24px;
+      padding: var(--space-sm) 0;
+    }
+    .chat-input::placeholder { color: var(--text-muted); }
+    .send-btn {
+      width: 44px; height: 44px; min-width: 44px;
+      border: none; background: var(--bg-message-user);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white; font-size: 18px;
+      transition: all var(--transition-fast); flex-shrink: 0;
+    }
+    .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .send-btn:not(:disabled):active { transform: scale(0.9); }
+    .send-btn:not(:disabled):hover { box-shadow: var(--shadow-glow); transform: scale(1.05); }
+    .input-hint {
+      font-size: var(--font-xs); color: var(--text-muted);
+      text-align: center; padding-top: var(--space-xs);
+    }
+    .rate-limit-warn { color: var(--accent); }
+
+    /* ============================================
+       TOAST
+       ============================================ */
+    .toast-container {
+      position: fixed; top: calc(var(--safe-top) + var(--space-md));
+      left: 50%; transform: translateX(-50%); z-index: 9999;
+      display: flex; flex-direction: column; gap: var(--space-sm);
+      pointer-events: none; width: calc(100% - var(--space-xl)); max-width: 420px;
+    }
+    .toast {
+      padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md);
+      font-size: var(--font-sm); font-weight: 500; backdrop-filter: blur(20px);
+      border: 1px solid; display: flex; align-items: center; gap: var(--space-sm);
+      pointer-events: all; animation: toastIn 0.3s ease forwards;
+      box-shadow: var(--shadow-lg);
+    }
+    .toast.removing { animation: toastOut 0.3s ease forwards; }
+    .toast-error { background: rgba(239,68,68,0.92); border-color: rgba(239,68,68,0.3); color: white; }
+    .toast-success { background: rgba(16,185,129,0.92); border-color: rgba(16,185,129,0.3); color: white; }
+    .toast-info { background: var(--bg-glass-strong); border-color: var(--border); color: var(--text-primary); }
+
+    /* ============================================
+       BOTTOM SHEET
+       ============================================ */
+    .bottom-sheet-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px); z-index: 200; animation: fadeIn 0.2s ease;
+    }
+    .bottom-sheet {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--bg-glass-strong); backdrop-filter: blur(30px);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: var(--space-md) var(--space-lg) calc(var(--safe-bottom) + var(--space-lg));
+      z-index: 201; animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 768px; margin: 0 auto;
+    }
+    .bottom-sheet-handle {
+      width: 36px; height: 4px; background: var(--text-muted);
+      border-radius: var(--radius-full); margin: 0 auto var(--space-lg); opacity: 0.3;
+    }
+    .bottom-sheet-item {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md); border-radius: var(--radius-md);
+      cursor: pointer; transition: background var(--transition-fast);
+      font-size: var(--font-base); color: var(--text-primary);
+      min-height: 48px; border: none; background: none;
+      width: 100%; text-align: left; font-family: inherit;
+    }
+    .bottom-sheet-item:hover { background: var(--border); }
+    .bottom-sheet-item:active { transform: scale(0.98); }
+    .bottom-sheet-icon {
+      width: 40px; height: 40px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(124,58,237,0.1); font-size: 18px; flex-shrink: 0;
+    }
+    .bottom-sheet-danger { color: var(--error); }
+    .bottom-sheet-danger .bottom-sheet-icon { background: rgba(239,68,68,0.1); }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 374px) {
+      .message { max-width: 95%; }
+      .tech-badges { gap: 4px; }
+      .tech-badge { font-size: 10px; padding: 3px 7px; }
+      .header-title { font-size: var(--font-base); }
+    }
+    @media (min-width: 414px) {
+      .chat-area { padding: var(--space-md) var(--space-lg); }
+    }
+    @media (min-width: 768px) {
+      .app-container { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .chat-area { padding: var(--space-lg) var(--space-xl); }
+      .message { max-width: 80%; }
+    }
+
+    /* Acessibilidade */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect, useCallback } = React;
+
+    // ============================================
+    // CONFIGURAÇÃO DA API + SYSTEM PROMPT
+    // ============================================
+    const API_CONFIG = {
+      url: 'https://openrouter.ai/api/v1/chat/completions',
+      key: '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',
+      model: 'stepfun/step-3.5-flash:free',
+      maxRetries: 2,
+      retryDelay: 1500,
+    };
+
+    // System prompt completo do PromptArchitect Pro
+    const SYSTEM_PROMPT = `Você é o **PromptArchitect Pro**, um assistente especialista em engenharia de prompt com domínio profundo das técnicas avançadas documentadas no PromptingGuide.ai. Sua missão é analisar, diagnosticar e refinar prompts para maximizar a performance de grandes modelos de linguagem (LLMs).
+
+## SEU PROCESSO DE RACIOCÍNIO (ReAct Interno)
+
+Para CADA prompt recebido, execute mentalmente:
+1. **Análise (Reasoning)**: Identifique falhas, ambiguidades, falta de contexto ou estrutura inadequada
+2. **Diagnóstico**: Classifique o problema (vago demais, sem exemplos, sem delimitadores, falta de persona, etc.)
+3. **Ação (Acting)**: Aplique técnicas corretivas específicas do seu arsenal
+4. **Verificação**: Confira se o prompt refinado segue princípios de clareza, especificidade e estruturação
+
+## ARSENAL TÉCNICO DISPONÍVEL
+
+Você domina e aplica estrategicamente:
+
+**Técnicas Fundamentais:**
+- Zero-Shot vs Few-Shot (exemplos contextuais)
+- Chain-of-Thought (CoT) - raciocínio passo a passo explícito
+- Self-Consistency - múltiplas abordagens para validação
+- Generated Knowledge - extração de conhecimento prévio antes da resposta
+
+**Técnicas Avançadas:**
+- ReAct (Reasoning + Acting) - pensamento e ação intercalados
+- Tree of Thoughts (ToT) - exploração de múltiplos caminhos de raciocínio
+- Automatic Prompt Engineer (APE) - auto-otimização de instruções
+- Active-Prompt - seleção adaptativa de exemplos
+- Directional Stimulus Prompting - pistas direcionais para guiar o LLM
+
+**Estruturação e Formatação:**
+- Delimitadores claros (###, """, <xml>, etc.)
+- Separação System vs User context
+- Especificação de output (JSON, Markdown, tabelas, código)
+- Constraints negativas ("NÃO faça X, faça Y")
+
+## PROTOCOLO DE INTERAÇÃO
+
+Quando o usuário enviar um prompt para refinamento:
+1. **MANTENHA** a intenção original e o objetivo do usuário
+2. **IDENTIFIQUE** o tipo de tarefa (criação, análise, codificação, criativo, raciocínio lógico)
+3. **SELECIONE** 2-3 técnicas mais adequadas para aquele contexto específico
+4. **REESCREVA** o prompt aplicando essas técnicas
+5. **EXPLIQUE** suas escolhas técnicas (meta-cognição)
+
+## FORMATO DE RESPOSTA OBRIGATÓRIO
+
+Sempre responda nesta estrutura exata:
+
+### 🔍 ANÁLISE DO PROMPT ORIGINAL
+[Diagnóstico rápido: pontos fortes e fracos em 2-3 bullets]
+
+### 🛠️ TÉCNICAS APLICADAS
+[Lista das técnicas do PromptingGuide.ai utilizadas e por quê]
+
+### ✨ PROMPT REFINADO (PRONTO PARA USO)
+\`\`\`markdown
+[Prompt completo e otimizado, pronto para copiar e colar]
+\`\`\`
+
+### 📋 GUIA DE USO
+[Instruções breves sobre como usar o prompt refinado, temperatura recomendada, ou considerações especiais]
+
+## CONSTRAINTS CRÍTICOS
+- NUNCA altere o objetivo final do usuário, apenas a forma de solicitá-lo
+- SEMPRE mantenha placeholders visíveis ([ASSUNTO], [CÓDIGO], [PÚBLICO]) quando o usuário usar variáveis genéricas
+- EVITE jargões excessivos na explicação, mas seja técnico na construção do prompt
+- INCLUA delimitadores visuais (emojis, ###, XML tags) quando melhorarem a parseabilidade pelo LLM
+- SUGIRA temperatura adequada (0.0 para factual, 0.7-1.0 para criativo)
+- Responda SEMPRE em português do Brasil
+
+Quando receber a primeira mensagem do usuário, apresente-se brevemente e aguarde o prompt que precisa ser refinado. Não gere exemplo próprio até que ele forneça o conteúdo base.`;
+
+    // ============================================
+    // RATE LIMITER - Max 5 req/min
+    // ============================================
+    const rateLimiter = (() => {
+      const timestamps = [];
+      const MAX = 5, WINDOW = 60000;
+      return {
+        canRequest() {
+          const now = Date.now();
+          while (timestamps.length && timestamps[0] < now - WINDOW) timestamps.shift();
+          return timestamps.length < MAX;
+        },
+        record() { timestamps.push(Date.now()); },
+        remaining() {
+          const now = Date.now();
+          while (timestamps.length && timestamps[0] < now - WINDOW) timestamps.shift();
+          return MAX - timestamps.length;
+        },
+        nextAvailableIn() {
+          if (this.canRequest()) return 0;
+          return Math.ceil((timestamps[0] + WINDOW - Date.now()) / 1000);
+        }
+      };
+    })();
+
+    // ============================================
+    // MARKDOWN PARSER (enhanced for structured responses)
+    // ============================================
+    function formatMessage(text) {
+      if (!text) return '';
+      let html = text
+        .replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>')
+        // Code blocks
+        .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+          `<pre><code>${code.trim()}</code></pre>`)
+        // Inline code
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        // Headers (h3 only for sections)
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        // Bold
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        // Italic
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        // Unordered lists
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        // Ordered lists
+        .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+        // Wrap consecutive <li> in <ul>
+        .replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>')
+        // Line breaks
+        .replace(/\n/g, '<br>');
+      return html;
+    }
+
+    // ============================================
+    // TOAST CONTAINER
+    // ============================================
+    function ToastContainer({ toasts, onRemove }) {
+      return (
+        <div className="toast-container" role="alert" aria-live="polite">
+          {toasts.map(t => (
+            <div key={t.id} className={`toast toast-${t.type} ${t.removing ? 'removing' : ''}`}
+              onClick={() => onRemove(t.id)}>
+              <span>{t.type === 'error' ? '⚠️' : t.type === 'success' ? '✅' : '💡'}</span>
+              <span>{t.message}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // ============================================
+    // TYPING INDICATOR
+    // ============================================
+    function TypingIndicator() {
+      return (
+        <div className="typing-indicator" aria-label="Analisando prompt">
+          <div className="message-avatar" style={{background:'var(--bg-glass)', border:'1px solid var(--border)'}}>🏗️</div>
+          <div>
+            <div className="typing-dots">
+              <div className="typing-dot"></div>
+              <div className="typing-dot"></div>
+              <div className="typing-dot"></div>
+            </div>
+            <div className="typing-label">Analisando e refinando...</div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // MESSAGE BUBBLE
+    // ============================================
+    function MessageBubble({ message }) {
+      const time = new Date(message.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const copyCode = (code) => {
+        navigator.clipboard.writeText(code).catch(() => {});
+      };
+
+      return (
+        <div className={`message message-${message.role}`} role="article"
+          aria-label={`Mensagem ${message.role === 'user' ? 'do usuário' : 'do PromptArchitect'}`}>
+          <div className="message-avatar" aria-hidden="true">
+            {message.role === 'user' ? '👤' : '🏗️'}
+          </div>
+          <div className="message-content">
+            <div className="message-bubble"
+              dangerouslySetInnerHTML={{ __html: formatMessage(message.content) }} />
+            <div className="message-time">{time}</div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // EMPTY STATE
+    // ============================================
+    function EmptyState({ onSuggestionClick }) {
+      const techniques = ['Chain-of-Thought', 'Few-Shot', 'ReAct', 'Tree of Thoughts', 'Self-Consistency', 'APE'];
+      const suggestions = [
+        { emoji: '✍️', label: 'Refinar um prompt vago', desc: '"Me escreve um texto sobre marketing"', prompt: 'Me escreve um texto sobre marketing' },
+        { emoji: '🐛', label: 'Melhorar prompt de debug', desc: '"Debug esse código"', prompt: 'Debug esse código' },
+        { emoji: '🧮', label: 'Otimizar raciocínio', desc: '"Quanto é 15% de 250 mais 30% de 180?"', prompt: 'Quanto é 15% de 250 mais 30% de 180?' },
+        { emoji: '🎯', label: 'Começar do zero', desc: 'Cole seu prompt e eu refino', prompt: 'Olá! Tenho um prompt que preciso melhorar. Pode me ajudar?' },
+      ];
+
+      return (
+        <div className="empty-state">
+          <div className="empty-logo" aria-hidden="true">🏗️</div>
+          <h2>PromptArchitect Pro</h2>
+          <div className="empty-tagline">
+            <span className="status-dot"></span>
+            Engenharia de Prompt Avançada
+          </div>
+          <p>Cole qualquer prompt e eu vou analisar, diagnosticar e refinar usando técnicas avançadas do PromptingGuide.ai</p>
+
+          <div className="tech-badges" aria-label="Técnicas disponíveis">
+            {techniques.map((t, i) => <span key={i} className="tech-badge">{t}</span>)}
+          </div>
+
+          <div className="suggestions" role="list" aria-label="Exemplos para começar">
+            {suggestions.map((s, i) => (
+              <button key={i} className="suggestion-chip" onClick={() => onSuggestionClick(s.prompt)} role="listitem">
+                <span className="suggestion-emoji">{s.emoji}</span>
+                <div className="suggestion-text">
+                  <div className="suggestion-label">{s.label}</div>
+                  <div className="suggestion-desc">{s.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================
+    // BOTTOM SHEET
+    // ============================================
+    function BottomSheet({ isOpen, onClose, onClearChat, onToggleTheme, isDark, messageCount }) {
+      if (!isOpen) return null;
+      return (
+        <>
+          <div className="bottom-sheet-overlay" onClick={onClose} />
+          <div className="bottom-sheet" role="dialog" aria-label="Menu de opções">
+            <div className="bottom-sheet-handle" />
+            <button className="bottom-sheet-item" onClick={onToggleTheme}>
+              <div className="bottom-sheet-icon">{isDark ? '☀️' : '🌙'}</div>
+              <div>
+                <div style={{fontWeight:600}}>{isDark ? 'Modo Claro' : 'Modo Escuro'}</div>
+                <div style={{fontSize:'var(--font-xs)', color:'var(--text-muted)'}}>Alterar tema visual</div>
+              </div>
+            </button>
+            <button className="bottom-sheet-item" onClick={() => { onClearChat(); onClose(); }}>
+              <div className="bottom-sheet-icon" style={{background:'rgba(124,58,237,0.1)'}}>🔄</div>
+              <div>
+                <div style={{fontWeight:600}}>Nova sessão</div>
+                <div style={{fontSize:'var(--font-xs)', color:'var(--text-muted)'}}>
+                  {messageCount} mensagens • Limpar e recomeçar
+                </div>
+              </div>
+            </button>
+            <button className="bottom-sheet-item bottom-sheet-danger" onClick={() => { onClearChat(); onClose(); }}>
+              <div className="bottom-sheet-icon">🗑️</div>
+              <div>
+                <div style={{fontWeight:600}}>Apagar tudo</div>
+                <div style={{fontSize:'var(--font-xs)', color:'var(--text-muted)'}}>Remover histórico permanentemente</div>
+              </div>
+            </button>
+          </div>
+        </>
+      );
+    }
+
+    // ============================================
+    // APP PRINCIPAL
+    // ============================================
+    function App() {
+      const [messages, setMessages] = useState([]);
+      const [input, setInput] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [toasts, setToasts] = useState([]);
+      const [showMenu, setShowMenu] = useState(false);
+      const [isDark, setIsDark] = useState(() => {
+        const saved = localStorage.getItem('pa-theme');
+        if (saved) return saved === 'dark';
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      });
+
+      const chatRef = useRef(null);
+      const inputRef = useRef(null);
+      const toastIdRef = useRef(0);
+
+      // Tema
+      useEffect(() => {
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        localStorage.setItem('pa-theme', isDark ? 'dark' : 'light');
+      }, [isDark]);
+
+      // Auto-scroll
+      useEffect(() => {
+        if (chatRef.current) {
+          requestAnimationFrame(() => { chatRef.current.scrollTop = chatRef.current.scrollHeight; });
+        }
+      }, [messages, loading]);
+
+      // Toast system
+      const addToast = useCallback((message, type = 'info') => {
+        const id = ++toastIdRef.current;
+        setToasts(prev => [...prev, { id, message, type, removing: false }]);
+        setTimeout(() => {
+          setToasts(prev => prev.map(t => t.id === id ? { ...t, removing: true } : t));
+          setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 300);
+        }, 4000);
+      }, []);
+
+      const removeToast = useCallback((id) => {
+        setToasts(prev => prev.map(t => t.id === id ? { ...t, removing: true } : t));
+        setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 300);
+      }, []);
+
+      // ============================================
+      // API CALL com retry
+      // ============================================
+      const fetchAI = useCallback(async (allMessages, attempt = 0) => {
+        try {
+          const apiMessages = [
+            { role: 'system', content: SYSTEM_PROMPT },
+            ...allMessages.map(m => ({
+              role: m.role === 'ai' ? 'assistant' : 'user',
+              content: m.content
+            }))
+          ];
+
+          const response = await fetch(API_CONFIG.url, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${API_CONFIG.key}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': window.location.href,
+              'X-Title': 'PromptArchitect Pro'
+            },
+            body: JSON.stringify({
+              model: API_CONFIG.model,
+              messages: apiMessages,
+              temperature: 0.7,
+              max_tokens: 3000,
+            })
+          });
+
+          if (!response.ok) {
+            if (response.status === 429 && attempt < API_CONFIG.maxRetries) {
+              await new Promise(r => setTimeout(r, API_CONFIG.retryDelay * (attempt + 1)));
+              return fetchAI(allMessages, attempt + 1);
+            }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          if (!data.choices || !data.choices[0]) throw new Error('Resposta inválida da API');
+          return data.choices[0].message.content;
+        } catch (error) {
+          if (attempt < API_CONFIG.maxRetries && !error.message.includes('429')) {
+            await new Promise(r => setTimeout(r, API_CONFIG.retryDelay));
+            return fetchAI(allMessages, attempt + 1);
+          }
+          throw error;
+        }
+      }, []);
+
+      // ============================================
+      // ENVIAR MENSAGEM
+      // ============================================
+      const sendMessage = useCallback(async (text) => {
+        const trimmed = (text || input).trim();
+        if (!trimmed || loading) return;
+
+        if (!rateLimiter.canRequest()) {
+          const wait = rateLimiter.nextAvailableIn();
+          addToast(`Limite de requisições atingido. Aguarde ${wait}s ⏳`, 'error');
+          return;
+        }
+
+        const userMsg = { role: 'user', content: trimmed, timestamp: Date.now(), id: Date.now() };
+        const newMessages = [...messages, userMsg];
+        setMessages(newMessages);
+        setInput('');
+        setLoading(true);
+
+        if (inputRef.current) inputRef.current.style.height = 'auto';
+
+        try {
+          rateLimiter.record();
+          const reply = await fetchAI(newMessages);
+          const aiMsg = { role: 'ai', content: reply, timestamp: Date.now(), id: Date.now() + 1 };
+          setMessages(prev => [...prev, aiMsg]);
+        } catch (error) {
+          console.error('PromptArchitect API Error:', error);
+          let errorMsg = 'Erro ao processar. Tente novamente.';
+          if (error.message.includes('429')) errorMsg = 'API sobrecarregada. Aguarde um momento.';
+          else if (error.message.includes('401')) errorMsg = 'Erro de autenticação.';
+          else if (error.message.includes('Failed to fetch')) errorMsg = 'Sem conexão com a internet.';
+          addToast(errorMsg, 'error');
+        } finally {
+          setLoading(false);
+        }
+      }, [input, loading, messages, fetchAI, addToast]);
+
+      const handleInputChange = useCallback((e) => {
+        setInput(e.target.value);
+        const el = e.target;
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+      }, []);
+
+      const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+      }, [sendMessage]);
+
+      const clearChat = useCallback(() => {
+        setMessages([]);
+        addToast('Sessão reiniciada ✨', 'success');
+      }, [addToast]);
+
+      const remaining = rateLimiter.remaining();
+
+      return (
+        <div className="app-container">
+          {/* HEADER */}
+          <header className="header" role="banner">
+            <div className="header-inner">
+              <div className="header-brand">
+                <div className="header-logo" aria-hidden="true">🏗️</div>
+                <div>
+                  <div className="header-title">PromptArchitect Pro</div>
+                  <div className="header-subtitle">
+                    <span className="status-dot"></span>
+                    Engenharia de Prompt • StepFun AI
+                  </div>
+                </div>
+              </div>
+              <div className="header-actions">
+                <button className="icon-btn" onClick={() => setShowMenu(true)}
+                  aria-label="Menu de opções" title="Menu">☰</button>
+              </div>
+            </div>
+          </header>
+
+          {/* CHAT */}
+          <main className="chat-area" ref={chatRef} role="log" aria-label="Conversa" aria-live="polite">
+            {messages.length === 0 && !loading ? (
+              <EmptyState onSuggestionClick={(text) => sendMessage(text)} />
+            ) : (
+              <>
+                {messages.map(msg => <MessageBubble key={msg.id} message={msg} />)}
+                {loading && <TypingIndicator />}
+              </>
+            )}
+          </main>
+
+          {/* INPUT */}
+          <footer className="input-area" role="contentinfo">
+            {messages.length > 0 && (
+              <div className="input-context">
+                <span className="input-context-badge">🏗️ Modo Refinamento</span>
+                <span>{messages.filter(m => m.role === 'user').length} prompt(s) analisado(s)</span>
+              </div>
+            )}
+            <div className="input-wrapper">
+              <textarea ref={inputRef} className="chat-input" value={input}
+                onChange={handleInputChange} onKeyDown={handleKeyDown}
+                placeholder="Cole seu prompt aqui para refinamento..."
+                rows={1} aria-label="Campo de prompt" disabled={loading} />
+              <button className="send-btn" onClick={() => sendMessage()}
+                disabled={!input.trim() || loading} aria-label="Enviar para análise">
+                {loading ? <span style={{fontSize:'14px'}}>⏳</span> : <span>➤</span>}
+              </button>
+            </div>
+            <div className="input-hint">
+              {remaining <= 2 ? (
+                <span className="rate-limit-warn">⚠️ {remaining} análise(s) restante(s) neste minuto</span>
+              ) : (
+                <span>Shift+Enter para nova linha • Enter para enviar</span>
+              )}
+            </div>
+          </footer>
+
+          {/* TOASTS */}
+          <ToastContainer toasts={toasts} onRemove={removeToast} />
+
+          {/* BOTTOM SHEET */}
+          <BottomSheet isOpen={showMenu} onClose={() => setShowMenu(false)}
+            onClearChat={clearChat}
+            onToggleTheme={() => { setIsDark(d => !d); setShowMenu(false); }}
+            isDark={isDark} messageCount={messages.length} />
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
